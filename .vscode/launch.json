@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Extract LP frames",
+            "type": "python",
+            "request": "launch",
+            "program": "extract_LP_dataset.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--video_dir",
+                "/home/andy/Desktop/datasets/lo_valledor",
+                "--output_dir",
+                "/home/andy/Desktop/datasets/LV_LP_crops"
+            ]
+        },
+        {
+            "name": "Preannotate",
+            "type": "python",
+            "request": "launch",
+            "program": "preannotate_LPs.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--lp_dir",
+                "/home/andy/Desktop/datasets/LV_LP_crops",
+                "--output_dir",
+                "/home/andy/Desktop/datasets/LV_LP_preannotations"
+            ]
+        },
+        {
+            "name": "Analyze videos",
+            "type": "python",
+            "request": "launch",
+            "program": "register.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--video_dir",
+                "/home/andy/Desktop/datasets/lo_valledor"
+            ]
+        }
+    ]
+}
