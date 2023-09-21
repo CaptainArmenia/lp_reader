@@ -129,9 +129,9 @@ for video_path in video_paths:
                             # show the license plate crop, together with its bluriness and the license plate
                             license_plate_crop_copy = license_plate_crop.copy()
 
-                            if not args.save_video:
-                                cv2.putText(license_plate_crop_copy, "{:.2f}".format(cv2.Laplacian(license_plate_crop, cv2.CV_64F).var()), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
-                                cv2.imshow("License Plate", license_plate_crop_copy)
+                            # if not args.save_video:
+                            #     cv2.putText(license_plate_crop_copy, "{:.2f}".format(cv2.Laplacian(license_plate_crop, cv2.CV_64F).var()), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+                            #     cv2.imshow("License Plate", license_plate_crop_copy)
         
                      # Draw track only if LP has not been read already
                     if track_id not in license_plates:

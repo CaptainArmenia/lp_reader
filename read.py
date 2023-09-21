@@ -118,7 +118,7 @@ class Reader:
 
         # Apply non-max suppression to identify best bounding box
         indices = cv2.dnn.NMSBoxes(boxes, confidences, self.confThreshold, self.nmsThreshold)
-        xmin, xmax, ymin, ymax, labels = [], [], [], [], []
+        xmin, xmax, ymin, ymax, labels, confs = [], [], [], [], [], []
         xmi,xma,ymi,yma,lc=[],[],[],[],[]
         xc,xcm,yc,ycm,ln=[],[],[],[],[]
         if len(indices) > 0:
@@ -129,33 +129,8 @@ class Reader:
                 xmax.append(x+w)
                 ymax.append(y+h)
                 label = str.upper((self.classes[class_IDs[i]]))
-                #print("-------------")
-
-    #                 print('label ',label)
-                if (label == str('A') or label == str('B')or label == str('C')
-                or label == str('D')or label == str('E')or label == str('F')
-                or label == str('G')or label == str('H')or label == str('I')
-                or label == str('J')or label == str('K')or label == str('L')
-                or label == str('M')or label == str('N')or label == str('O')
-                or label == str('P')or label == str('Q')or label == str('R')
-                or label == str('S')or label == str('T')or label == str('U')or label == str('V')
-                or label == str('W')or label == str('X')or label == str('Y')or label == str('Z')):
-                    xmi.append(x)
-                    ymi.append(y)
-                    xma.append(x+w)
-                    yma.append(y+h)
-                    lc.append(label)
-    #                     print("xmi ",xmi,ymi,xma,yma)
-
-                if (label == str('0') or label == str('1')or label == str('2')or label == str('3')
-                or label == str('4')or label == str('5')or label == str('6')or label == str('7')
-                or label == str('8')or label == str('9')):
-                    xc.append(x)
-                    yc.append(y)
-                    xcm.append(x+w)
-                    ycm.append(y+h)
-                    ln.append(label)
-    #                     print("xc ",xc,yc,xcm,ycm)
+                labels.append(label),
+                confs.append(confidences[i])
 
         # for each detection, check if box is considerably smaller than the others
         # if so, remove it
@@ -170,28 +145,12 @@ class Reader:
                     xmax.pop(i)
                     ymax.pop(i)
                     labels.pop(i)
+                    confs.pop(i)
                     
-        boxes = pd.DataFrame({"xmin": xmin, "ymin": ymin, "xmax": xmax, "ymax": ymax})
-        char = pd.DataFrame({"xmi": xmi, "ymi": ymi, "xma": xma, "yma": yma, "Label": lc})
-        num = pd.DataFrame({"xmi": xc, "yc": yc, "xca": xcm, "yca": ycm, "Label": ln})
+        # sort boxes and confidences by xmin coordinate
+        xmin, ymin, xmax, ymax, labels, confs = zip(*sorted(zip(xmin, ymin, xmax, ymax, labels, confs), key=lambda x: x[0]))
+        # obtain the license plate number
+        lp_num = ''.join(labels)
+        
 
-        char.sort_values(by=['xmi'], inplace=True)
-        num.sort_values(by=['xmi'], inplace=True)
-
-        a=char[char.columns[4]]
-
-        b=num[num.columns[4]]
-        res = a._append(b)
-
-        d1 = pd.DataFrame({"label":res})
-        d2 = d1.transpose()
-        d3 = d2.values.tolist()
-        flatten_mat=[]
-        for sublist in d3:
-            for val in sublist:
-                flatten_mat.append(val)
-
-        lp_num = ''.join(map(str,flatten_mat))
-        #print("LP NUM: ",lp_num)
-
-        return lp_num, (min(confidences) if len(confidences) > 0 else 0)
+        return lp_num, (min(confs) if len(confs) > 0 else 0)
