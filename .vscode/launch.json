@@ -41,7 +41,8 @@
             "justMyCode": true,
             "args": [
                 "--video_dir",
-                "/home/andy/Desktop/datasets/lo_valledor"
+                "/home/andy/Desktop/datasets/lo_valledor_patente",
+                "--save_video"
             ]
         }
     ]

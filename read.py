@@ -129,7 +129,7 @@ class Reader:
                 xmax.append(x+w)
                 ymax.append(y+h)
                 label = str.upper((self.classes[class_IDs[i]]))
-                print("-------------")
+                #print("-------------")
 
     #                 print('label ',label)
                 if (label == str('A') or label == str('B')or label == str('C')
@@ -192,6 +192,6 @@ class Reader:
                 flatten_mat.append(val)
 
         lp_num = ''.join(map(str,flatten_mat))
-        print("LP NUM: ",lp_num)
+        #print("LP NUM: ",lp_num)
 
         return lp_num, (min(confidences) if len(confidences) > 0 else 0)
